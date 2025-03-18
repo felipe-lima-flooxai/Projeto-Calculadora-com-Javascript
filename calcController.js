@@ -47,7 +47,7 @@ class CalcControlller {
     pushOperation(value){
         this._operation.push(value);
 
-        if(this._operation.lenght > 3){
+        if(this._operation.length > 3){
             this.calc();
         }
     }
@@ -56,10 +56,18 @@ class CalcControlller {
         let last = this._operation.pop();
         let result = eval(this._operation.join(""));
         this._operation = [result, last];
+        this.setLastNumberToDisplay();
     }
 
     setLastNumberToDisplay(){
-        
+        let lastNumber;
+        for(let i = this._operation.length - 1; i >= 0; i--){
+            if(!this.isOperator(this._operation[i])){
+                lastNumber = this._operation[i];
+                break;
+            }
+        }
+        this.displayCalc = lastNumber;
     }
 
     addOperation(value){
@@ -76,6 +84,7 @@ class CalcControlller {
             } else {
                 //da um push simples de numero e daí o prox número cai na situação lá de baixo
                 this.pushOperation(value);
+                this.setLastNumberToDisplay();
             }
         //[1] - ultimo no array é número
         } else {
